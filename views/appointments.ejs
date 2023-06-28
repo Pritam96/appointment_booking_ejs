@@ -1,0 +1,55 @@
+<%- include('./includes/head.ejs') %>
+    <%- include('./includes/navbar.ejs') %>
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col">
+          <div class="card p-4">
+            <h2>All Appointments</h2>
+            <% if (data.length > 0) { %>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% for (let d of data) { %>
+                <tr>
+                  <td><%= d.firstName %> <%= d.lastName %></td>
+                  <td><%= d.email %></td>
+                  <td><%= d.phone %></td>
+                  <td><%= d.appointmentDate %> at <%= d.appointmentTime %></td>
+                  <td>
+                    <a
+                      href="/edit/<%= d.id %>"
+                      class="btn btn-outline-warning m-2"
+                      >Edit</a
+                    >
+                  </td>
+                  <td>
+                    <form action="/delete" method="POST">
+                      <input
+                        type="hidden"
+                        name="appointmentId"
+                        value="<%= d.id %>"
+                      />
+                      <button class="btn btn-danger m-2" type="submit">
+                        Delete
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+                <% } %>
+              </tbody>
+            </table>
+            <% } else { %>
+            <p>No Appointments Available</p>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+<%- include('./includes/end.ejs') %>

@@ -1,0 +1,85 @@
+<%- include('./includes/head.ejs') %>
+    <%- include('./includes/navbar.ejs') %>
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-lg-6 col-md-4">
+          <div class="card p-4">
+            <h2>Register Your Appointment</h2>
+            <form action="/add-appointment" method="POST">
+              <div class="row g-3 mt-2">
+                <div class="col">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="First name"
+                    aria-label="First name"
+                    id="firstName"
+                    name="firstName"
+                    required
+                  />
+                </div>
+                <div class="col">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Last name"
+                    aria-label="Last name"
+                    id="lastName"
+                    name="lastName"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="row g-3 mt-2">
+                <div class="col">
+                  <input
+                    type="email"
+                    class="form-control"
+                    placeholder="Email ID"
+                    aria-label="Email ID"
+                    id="email"
+                    name="email"
+                    required
+                  />
+                </div>
+                <div class="col">
+                  <input
+                    type="number"
+                    class="form-control"
+                    placeholder="Phone No"
+                    aria-label="Phone No"
+                    id="phone"
+                    name="phone"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="row g-3 mt-2">
+                <div class="col">
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="dateInput"
+                    name="dateInput"
+                  />
+                </div>
+                <div class="col">
+                  <input
+                    type="time"
+                    class="form-control"
+                    id="timeInput"
+                    name="timeInput"
+                    required
+                  />
+                </div>
+              </div>
+              <button class="btn btn-primary mt-3 mb-3" type="submit">
+                Add Appointment
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+<%- include('./includes/end.ejs') %>
