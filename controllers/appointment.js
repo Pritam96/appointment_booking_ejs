@@ -8,10 +8,10 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getAppointments = (req, res, next) => {
-  Appointment.fetchAll()
-    .then((data) => {
+  Appointment.findAll()
+    .then((appointments) => {
       res.render('appointments', {
-        data: data[0],
+        data: appointments,
         pageTitle: 'All Appointments',
         path: '/appointments',
       });
@@ -27,31 +27,30 @@ exports.postAppointment = (req, res, next) => {
   const appointmentDate = req.body.dateInput;
   const appointmentTime = req.body.timeInput;
 
-  const appointment = new Appointment(
-    null,
-    firstName,
-    lastName,
-    email,
-    phone,
-    appointmentDate,
-    appointmentTime
-  );
-
-  //   console.log(appointment);
-
-  appointment
-    .save()
+  Appointment.create({
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    phone: phone,
+    appointmentDate: appointmentDate,
+    appointmentTime: appointmentTime,
+  })
     .then((result) => {
-      console.log('Appointment Added');
-      res.redirect('/');
+      // console.log(result);
+      res.redirect('/appointments');
+      console.log('Appointment Created');
     })
     .catch((err) => console.log(err));
 };
 
 exports.postDeleteAppointment = (req, res, next) => {
   const appointmentId = req.body.appointmentId;
-  Appointment.deleteById(appointmentId)
+  Appointment.findByPk(appointmentId)
+    .then((appointment) => {
+      return appointment.destroy();
+    })
     .then((result) => {
+      // console.log(result);
       console.log('Appointment Deleted');
       res.redirect('/appointments');
     })
@@ -60,13 +59,10 @@ exports.postDeleteAppointment = (req, res, next) => {
 
 exports.getEditAppointment = (req, res, next) => {
   const appointmentId = req.params.appointmentId;
-  Appointment.findById(appointmentId)
-    .then(([data]) => {
-      const dateInput = new Date(Date.parse(data[0].appointmentDate));
-      //   console.log(dateInput.toJSON().slice(0, 10));
+  Appointment.findByPk(appointmentId)
+    .then((appointment) => {
       res.render('edit-appointment', {
-        data: data[0],
-        dateInput: dateInput.toJSON().slice(0, 10),
+        data: appointment,
         pageTitle: 'Edit Appointment',
         path: '/edit',
       });
@@ -83,20 +79,20 @@ exports.postEditAppointment = (req, res, next) => {
   const appointmentDate = req.body.dateInput;
   const appointmentTime = req.body.timeInput;
 
-  const updatedAppointment = new Appointment(
-    id,
-    firstName,
-    lastName,
-    email,
-    phone,
-    appointmentDate,
-    appointmentTime
-  );
+  Appointment.findByPk(id)
+    .then((appointment) => {
+      appointment.firstName = firstName;
+      appointment.lastName = lastName;
+      appointment.email = email;
+      appointment.phone = phone;
+      appointment.appointmentDate = appointmentDate;
+      appointment.appointmentTime = appointmentTime;
 
-  updatedAppointment
-    .save()
+      return appointment.save();
+    })
     .then((result) => {
-      console.log('Appointment Edited');
+      // console.log(result);
+      console.log('Appointment Updated');
       res.redirect('/appointments');
     })
     .catch((err) => console.log(err));

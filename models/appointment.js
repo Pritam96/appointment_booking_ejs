@@ -1,66 +1,38 @@
-const db = require('../utils/database');
+const Sequelize = require('sequelize');
 
-module.exports = class Appointment {
-  constructor(
-    id,
-    firstName,
-    lastName,
-    email,
-    phone,
-    appointmentDate,
-    appointmentTime
-  ) {
-    this.id = id;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.email = email;
-    this.phone = phone;
-    this.appointmentDate = appointmentDate;
-    this.appointmentTime = appointmentTime;
-  }
+const sequelize = require('../utils/database');
 
-  save() {
-    if (this.id) {
-      return db.execute(
-        'UPDATE appointments SET firstName = ?, lastName = ?, email = ?, phone = ?, appointmentDate = ?, appointmentTime = ? WHERE appointments.id = ?',
-        [
-          this.firstName,
-          this.lastName,
-          this.email,
-          this.phone,
-          this.appointmentDate,
-          this.appointmentTime,
-          this.id,
-        ]
-      );
-    } else {
-      return db.execute(
-        'INSERT INTO appointments (firstName, lastName, email, phone, appointmentDate, appointmentTime) VALUES (?,?,?,?,?,?)',
-        [
-          this.firstName,
-          this.lastName,
-          this.email,
-          this.phone,
-          this.appointmentDate,
-          this.appointmentTime,
-        ]
-      );
-    }
-  }
+const Appointment = sequelize.define('appointment', {
+  id: {
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+    primaryKey: true,
+  },
+  firstName: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  lastName: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  email: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  phone: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  appointmentDate: {
+    type: Sequelize.DATEONLY,
+    allowNull: false,
+  },
+  appointmentTime: {
+    type: Sequelize.TIME,
+    allowNull: false,
+  },
+});
 
-  static deleteById(id) {
-    return db.execute('DELETE FROM appointments WHERE appointments.id = ?', [
-      id,
-    ]);
-  }
-
-  static fetchAll() {
-    return db.execute('SELECT * FROM appointments');
-  }
-
-  static findById(id) {
-    return db.execute('SELECT * FROM appointments WHERE appointments.id = ?', [
-      id,
-    ]);
-  }
-};
+module.exports = Appointment;
